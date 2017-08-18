@@ -28,6 +28,8 @@ public class Xplane extends CordovaPlugin {
 			sendDREF(args, callbackContext);
 		} else if ("sendPOSI".equals(action)) {
 			sendPOSI(args, callbackContext);
+		} else if ("sendTEXT".equals(action)) {
+			sendTEXT(args, callbackContext);
 		} else {
 			return false;
 		}
@@ -105,6 +107,23 @@ public class Xplane extends CordovaPlugin {
 			}
 			callbackContext.success(json);
 		}
+	}
+
+	private void sendTEXT(JSONArray args, CallbackContext callbackContext) {
+		JSONObject json = new JSONObject();
+		try {
+			json.put("result", "ok");
+			json.put("method", "sendTEXT");
+			try {
+				mXpc.sendTEXT(args.getString(0));
+			} catch (Exception ex) {
+				json.put("result", "error");
+				json.put("method", "sendTEXT");
+				json.put("message", ex.getMessage());
+			}
+		} catch (Exception e) {
+		}
+		callbackContext.success(json);
 	}
 
 	private JSONObject successDREFResult(String dref, String method, float[] values) {
