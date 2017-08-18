@@ -27,4 +27,8 @@ Xplane.prototype.sendTEXT = function(msg, successCallback, errorCallback) {
 	exec(successCallback, errorCallback, 'Xplane', 'sendTEXT', [msg]);
 }
 
+Xplane.prototype.getCTRL = function(ac, successCallback, errorCallback) {
+	exec(successCallback, errorCallback, 'Xplane', 'getCTRL', [ac]);
+}
+
 module.exports = new Xplane();

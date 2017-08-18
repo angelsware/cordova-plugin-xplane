@@ -32,6 +32,8 @@ public class Xplane extends CordovaPlugin {
 			getPOSI(args, callbackContext);
 		} else if ("sendTEXT".equals(action)) {
 			sendTEXT(args, callbackContext);
+		} else if ("getCTRL".equals(action)) {
+			getCTRL(args, callbackContext);
 		} else {
 			return false;
 		}
@@ -144,6 +146,27 @@ public class Xplane extends CordovaPlugin {
 				json.put("message", ex.getMessage());
 			}
 		} catch (Exception e) {
+		}
+		callbackContext.success(json);
+	}
+
+	private void getCTRL(JSONArray args, CallbackContext callbackContext) {
+		JSONObject json = new JSONObject();
+		try {
+			try {
+				json.put("method", "getCTRL");
+				float[] values = mXpc.getCTRL(args.getInt(0));
+				json.put("result", "ok");
+				JSONArray a = new JSONArray();
+				for (int i = 0; i < values.length; ++i) {
+					a.put(values[i]);
+				}
+				json.put("values", a);
+			} catch (Exception ex) {
+				json.put("result", "error");
+				json.put("message", ex.getMessage());
+			}
+		} catch (Exception ex) {
 		}
 		callbackContext.success(json);
 	}
