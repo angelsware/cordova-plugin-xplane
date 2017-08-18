@@ -11,10 +11,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/apache/cordova-plugin-device"
+    "url": "https://github.com/angelsware/cordova-plugin-xplane.git"
   },
   "bugs": {
-    "url": "https://issues.apache.org/jira/browse/CB"
+    "url": ""
   },
   "keywords": [
     "cordova",

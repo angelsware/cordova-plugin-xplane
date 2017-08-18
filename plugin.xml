@@ -26,9 +26,9 @@
     <name>Xplane</name>
     <description>Cordova X-Plane Plugin</description>
     <license>Apache 2.0</license>
-    <keywords>cordova,device</keywords>
-    <repo>https://git-wip-us.apache.org/repos/asf/cordova-plugin-device.git</repo>
-    <issue>https://issues.apache.org/jira/browse/CB/component/12320648</issue>
+    <keywords>cordova,xplane</keywords>
+    <repo>https://github.com/angelsware/cordova-plugin-xplane.git</repo>
+    <issue></issue>
 
     <js-module src="www/xplane.js" name="Xplane">
         <clobbers target="Xplane" />
@@ -43,8 +43,8 @@
         </config-file>
 
         <source-file src="src/android/Xplane.java" target-dir="src/com/angelsware/xplane" />
-		<source-file src="src/android/gov/nasa/xpc/ViewType.java" target-dir="src/gov/nasa/xpc" />
-		<source-file src="src/android/gov/nasa/xpc/WaypointOp.java" target-dir="src/gov/nasa/xpc" />
-		<source-file src="src/android/gov/nasa/xpc/XPlaneConnect.java" target-dir="src/gov/nasa/xpc" />
+        <source-file src="src/android/gov/nasa/xpc/ViewType.java" target-dir="src/gov/nasa/xpc" />
+        <source-file src="src/android/gov/nasa/xpc/WaypointOp.java" target-dir="src/gov/nasa/xpc" />
+        <source-file src="src/android/gov/nasa/xpc/XPlaneConnect.java" target-dir="src/gov/nasa/xpc" />
     </platform>
 </plugin>
