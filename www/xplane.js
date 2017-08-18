@@ -15,4 +15,8 @@ Xplane.prototype.sendDREF = function(dref, values, successCallback, errorCallbac
 	exec(successCallback, errorCallback, 'Xplane', 'sendDREF', [dref, values]);
 }
 
+Xplane.prototype.sendPOSI = function(values, ac, successCallback, errorCallback) {
+	exec(successCallback, errorCallback, 'Xplane', 'sendPOSI', [values, ac]);
+}
+
 module.exports = new Xplane();

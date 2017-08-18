@@ -8,12 +8,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import gov.nasa.xpc.XPlaneConnect;
-import java.io.IOException;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 
 public class Xplane extends CordovaPlugin {
-	public static final String TAG = "X-Plane";
 	private XPlaneConnect mXpc = null;
 
 	public Xplane() {
@@ -30,6 +26,8 @@ public class Xplane extends CordovaPlugin {
 			getDREF(args, callbackContext);
 		} else if ("sendDREF".equals(action)) {
 			sendDREF(args, callbackContext);
+		} else if ("sendPOSI".equals(action)) {
+			sendPOSI(args, callbackContext);
 		} else {
 			return false;
 		}
@@ -86,6 +84,29 @@ public class Xplane extends CordovaPlugin {
 		}
 	}
 
+	private void sendPOSI(JSONArray args, CallbackContext callbackContext) {
+		try {
+			float[] values = new float[args.getJSONArray(0).length()];
+			for (int i = 0; i < args.getJSONArray(0).length(); ++i) {
+				values[i] = (float)args.getJSONArray(0).getDouble(i);
+			}
+			mXpc.sendPOSI(values, args.getInt(1));
+			JSONObject json = new JSONObject();
+			json.put("result", "ok");
+			json.put("method", "sendPOSI");
+			callbackContext.success(json);
+		} catch (Exception ex) {
+			JSONObject json = new JSONObject();
+			try {
+				json.put("result", "error");
+				json.put("method", "sendPOSI");
+				json.put("message", ex.getMessage());
+			} catch (Exception e) {
+			}
+			callbackContext.success(json);
+		}
+	}
+
 	private JSONObject successDREFResult(String dref, String method, float[] values) {
 		JSONObject json = new JSONObject();
 		try {
@@ -115,10 +136,4 @@ public class Xplane extends CordovaPlugin {
 		}
 		return json;
 	}
-
-	/*
-		{"result":"ok","method":"getDREF","dref":"sim/...","values":[1.0,2.0]}
-		{"result":"ok","method":"sendDREF","dref":"sim/..."}
-		{"result":"error","method":"sendDREF","message":"Could not..."}
-	*/
 }
