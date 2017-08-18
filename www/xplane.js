@@ -19,6 +19,10 @@ Xplane.prototype.sendPOSI = function(values, ac, successCallback, errorCallback)
 	exec(successCallback, errorCallback, 'Xplane', 'sendPOSI', [values, ac]);
 }
 
+Xplane.prototype.getPOSI = function(ac, successCallback, errorCallback) {
+	exec(successCallback, errorCallback, 'Xplane', 'getPOSI', [ac]);
+}
+
 Xplane.prototype.sendTEXT = function(msg, successCallback, errorCallback) {
 	exec(successCallback, errorCallback, 'Xplane', 'sendTEXT', [msg]);
 }

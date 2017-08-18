@@ -28,6 +28,8 @@ public class Xplane extends CordovaPlugin {
 			sendDREF(args, callbackContext);
 		} else if ("sendPOSI".equals(action)) {
 			sendPOSI(args, callbackContext);
+		} else if ("getPOSI".equals(action)) {
+			getPOSI(args, callbackContext);
 		} else if ("sendTEXT".equals(action)) {
 			sendTEXT(args, callbackContext);
 		} else {
@@ -109,16 +111,36 @@ public class Xplane extends CordovaPlugin {
 		}
 	}
 
+	private void getPOSI(JSONArray args, CallbackContext callbackContext) {
+		JSONObject json = new JSONObject();
+		try {
+			try {
+				json.put("method", "getPOSI");
+				float[] values = mXpc.getPOSI(args.getInt(0));
+				json.put("result", "ok");
+				JSONArray a = new JSONArray();
+				for (int i = 0; i < values.length; ++i) {
+					a.put(values[i]);
+				}
+				json.put("values", a);
+			} catch (Exception ex) {
+				json.put("result", "error");
+				json.put("message", ex.getMessage());
+			}
+		} catch (Exception ex) {
+		}
+		callbackContext.success(json);
+	}
+
 	private void sendTEXT(JSONArray args, CallbackContext callbackContext) {
 		JSONObject json = new JSONObject();
 		try {
-			json.put("result", "ok");
 			json.put("method", "sendTEXT");
 			try {
 				mXpc.sendTEXT(args.getString(0));
+				json.put("result", "ok");
 			} catch (Exception ex) {
 				json.put("result", "error");
-				json.put("method", "sendTEXT");
 				json.put("message", ex.getMessage());
 			}
 		} catch (Exception e) {
