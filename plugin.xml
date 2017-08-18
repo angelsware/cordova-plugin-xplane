@@ -43,5 +43,8 @@
         </config-file>
 
         <source-file src="src/android/Xplane.java" target-dir="src/com/angelsware/xplane" />
+		<source-file src="src/android/gov/nasa/xpc/ViewType.java" target-dir="src/gov/nasa/xpc" />
+		<source-file src="src/android/gov/nasa/xpc/WaypointOp.java" target-dir="src/gov/nasa/xpc" />
+		<source-file src="src/android/gov/nasa/xpc/XPlaneConnect.java" target-dir="src/gov/nasa/xpc" />
     </platform>
 </plugin>

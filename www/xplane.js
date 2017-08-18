@@ -7,8 +7,12 @@ Xplane.prototype.connect = function(xpHost, xpPort, port, successCallback, error
 	exec(successCallback, errorCallback, 'Xplane', 'connect', [xpHost, xpPort, port]);
 }
 
-Xplane.prototype.getDREF = function(successCallback, errorCallback) {
-	exec(successCallback, errorCallback, 'Xplane', 'getDREF', []);
+Xplane.prototype.getDREF = function(dref, successCallback, errorCallback) {
+	exec(successCallback, errorCallback, 'Xplane', 'getDREF', [dref]);
+}
+
+Xplane.prototype.sendDREF = function(dref, values, successCallback, errorCallback) {
+	exec(successCallback, errorCallback, 'Xplane', 'sendDREF', [dref, values]);
 }
 
 module.exports = new Xplane();
