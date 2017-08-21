@@ -36,7 +36,7 @@ cordova plugin add https://github.com/angelsware/cordova-plugin-xplane
 ### Quick Example
 
 ```js
-Xplane.connect("localhost", 49009, 0, function(result) {
+Xplane.connect("localhost", 49009, 0, 100, function(result) {
 	window.alert(JSON.stringify(result));
 });
 
@@ -52,9 +52,10 @@ The Xplane Cordova plugin is an abstraction layer and uses Nasa's XPlaneConnect.
 - https://github.com/nasa/XPlaneConnect/wiki/XPC-Client-Reference
 
 ```js
-Xplane.connect(string:xpHOST, int:xpPort, int:port, function:callback);
+Xplane.connect(string:xpHOST, int:xpPort, int:port, int:timeout, function:callback);
 Xplane.getCTRL(int:ac, function:callback);
 Xplane.getDREF(string:dref, function:callback);
+Xplane.getDREFs(string[]:drefs, function:callback);
 Xplane.getPOSI(int:ac, function:callback);
 Xplane.sendDREF(string:dref, float[]:values, function:callback);
 Xplane.sendPOSI(float[]:values, int:ac, function:callback);

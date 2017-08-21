@@ -22,6 +22,8 @@ public class Xplane extends CordovaPlugin {
 			connect(args, callbackContext);
 		} else if ("getDREF".equals(action)) {
 			getDREF(args, callbackContext);
+		} else if ("getDREFs".equals(action)) {
+			getDREFs(args, callbackContext);
 		} else if ("sendDREF".equals(action)) {
 			sendDREF(args, callbackContext);
 		} else if ("sendPOSI".equals(action)) {
@@ -42,7 +44,7 @@ public class Xplane extends CordovaPlugin {
 		JSONObject json = new JSONObject();
 		json.put("method", "connect");
 		try {
-			mXpc = new XPlaneConnect(args.getString(0), args.getInt(1), args.getInt(2));
+			mXpc = new XPlaneConnect(args.getString(0), args.getInt(1), args.getInt(2), args.getInt(3));
 			json.put("result","ok");
 		} catch (Exception ex) {
 			json.put("result","error");
@@ -60,6 +62,35 @@ public class Xplane extends CordovaPlugin {
 			r = failedDREFResult(dref, "getDREF", ex.getMessage());
 		}
 		callbackContext.success(r);
+	}
+
+	private void getDREFs(JSONArray args, CallbackContext callbackContext) throws JSONException {
+		JSONArray jsonDrefs = args.getJSONArray(0);
+		JSONObject json = new JSONObject();
+		json.put("method", "getDREFs");
+		try {
+			String[] drefs = new String[jsonDrefs.length()];
+			for (int i = 0; i < jsonDrefs.length(); ++i) {
+				drefs[i] = (String)jsonDrefs.getString(i);
+			}
+			float[][] values = mXpc.getDREFs(drefs);
+			JSONArray drefArray = new JSONArray();
+			for (int i = 0; i < values.length; ++i) {
+				JSONObject o = new JSONObject();
+				JSONArray a = new JSONArray();
+				for (int k = 0; k < values[i].length; ++k) {
+					a.put(values[i][k]);
+				}
+				o.put(drefs[i], a);
+				drefArray.put(o);
+			}
+			json.put("values", drefArray);
+			json.put("result", "ok");
+		} catch(Exception ex) {
+			json.put("result", "error");
+			json.put("message", ex.getMessage());
+		}
+		callbackContext.success(json);
 	}
 
 	private void sendDREF(JSONArray args, CallbackContext callbackContext) throws JSONException {
