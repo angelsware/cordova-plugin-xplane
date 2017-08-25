@@ -7,6 +7,10 @@ Xplane.prototype.connect = function(xpHost, xpPort, port, timeout, successCallba
 	exec(successCallback, errorCallback, 'Xplane', 'connect', [xpHost, xpPort, port, timeout]);
 }
 
+Xplane.prototype.close = function(successCallback, errorCallback) {
+	exec(successCallback, errorCallback, 'Xplane', 'close', []);
+}
+
 Xplane.prototype.getDREF = function(dref, successCallback, errorCallback) {
 	exec(successCallback, errorCallback, 'Xplane', 'getDREF', [dref]);
 }
@@ -33,6 +37,14 @@ Xplane.prototype.sendTEXT = function(msg, successCallback, errorCallback) {
 
 Xplane.prototype.getCTRL = function(ac, successCallback, errorCallback) {
 	exec(successCallback, errorCallback, 'Xplane', 'getCTRL', [ac]);
+}
+
+Xplane.prototype.sendCTRL = function(ac, values, successCallback, errorCallback) {
+	exec(successCallback, errorCallback, 'Xplane', 'sendCTRL', [values, ac]);
+}
+
+Xplane.prototype.sendCOMM = function(comm, successCallback, errorCallback) {
+	exec(successCallback, errorCallback, 'Xplane', 'sendCOMM', [comm]);
 }
 
 module.exports = new Xplane();

@@ -17,27 +17,56 @@ public class Xplane extends CordovaPlugin {
 		super.initialize(cordova, webView);
 	}
 
-	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-		if ("connect".equals(action)) {
-			connect(args, callbackContext);
-		} else if ("getDREF".equals(action)) {
-			getDREF(args, callbackContext);
-		} else if ("getDREFs".equals(action)) {
-			getDREFs(args, callbackContext);
-		} else if ("sendDREF".equals(action)) {
-			sendDREF(args, callbackContext);
-		} else if ("sendPOSI".equals(action)) {
-			sendPOSI(args, callbackContext);
-		} else if ("getPOSI".equals(action)) {
-			getPOSI(args, callbackContext);
-		} else if ("sendTEXT".equals(action)) {
-			sendTEXT(args, callbackContext);
-		} else if ("getCTRL".equals(action)) {
-			getCTRL(args, callbackContext);
-		} else {
-			return false;
-		}
+	public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+		cordova.getThreadPool().execute(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					execute();
+				} catch(JSONException ex) {
+				}
+			}
+
+			private void execute() throws JSONException {
+				if ("connect".equals(action)) {
+					connect(args, callbackContext);
+				} else if ("close".equals(action)) {
+					close(args, callbackContext);
+				} else if ("getDREF".equals(action)) {
+					getDREF(args, callbackContext);
+				} else if ("getDREFs".equals(action)) {
+					getDREFs(args, callbackContext);
+				} else if ("sendDREF".equals(action)) {
+					sendDREF(args, callbackContext);
+				} else if ("sendPOSI".equals(action)) {
+					sendPOSI(args, callbackContext);
+				} else if ("getPOSI".equals(action)) {
+					getPOSI(args, callbackContext);
+				} else if ("sendTEXT".equals(action)) {
+					sendTEXT(args, callbackContext);
+				} else if ("getCTRL".equals(action)) {
+					getCTRL(args, callbackContext);
+				} else if ("sendCTRL".equals(action)) {
+					sendCTRL(args, callbackContext);
+				} else if ("sendCOMM".equals(action)) {
+					sendCOMM(args, callbackContext);
+				}
+			}
+		});
 		return true;
+	}
+
+	private void close(JSONArray args, CallbackContext callbackContext) throws JSONException {
+		JSONObject json = new JSONObject();
+		if (mXpc != null) {
+			mXpc.close();
+			mXpc = null;
+			json.put("result","ok");
+		} else {
+			json.put("result","error");
+			json.put("message","already disconnected");
+		}
+		callbackContext.success(json);
 	}
 
 	private void connect(JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -45,6 +74,7 @@ public class Xplane extends CordovaPlugin {
 		json.put("method", "connect");
 		try {
 			mXpc = new XPlaneConnect(args.getString(0), args.getInt(1), args.getInt(2), args.getInt(3));
+			mXpc.getDREF("sim/test/test_float");
 			json.put("result","ok");
 		} catch (Exception ex) {
 			json.put("result","error");
@@ -168,6 +198,36 @@ public class Xplane extends CordovaPlugin {
 				a.put(values[i]);
 			}
 			json.put("values", a);
+		} catch (Exception ex) {
+			json.put("result", "error");
+			json.put("message", ex.getMessage());
+		}
+		callbackContext.success(json);
+	}
+
+	private void sendCTRL(JSONArray args, CallbackContext callbackContext) throws JSONException {
+		JSONObject json = new JSONObject();
+		json.put("method", "sendCTRL");
+		float[] values = new float[args.getJSONArray(0).length()];
+		for (int i = 0; i < args.getJSONArray(0).length(); ++i) {
+			values[i] = (float)args.getJSONArray(0).getDouble(i);
+		}
+		try {
+			mXpc.sendCTRL(values, args.getInt(1));
+			json.put("result", "ok");
+		} catch (Exception ex) {
+			json.put("result", "error");
+			json.put("message", ex.getMessage());
+		}
+		callbackContext.success(json);
+	}
+
+	private void sendCOMM(JSONArray args, CallbackContext callbackContext) throws JSONException {
+		String comm = args.getString(0);
+		JSONObject json = new JSONObject();
+		try {
+			mXpc.sendCOMM(comm);
+			json.put("result", "ok");
 		} catch (Exception ex) {
 			json.put("result", "error");
 			json.put("message", ex.getMessage());
